@@ -100,7 +100,7 @@ async function manageJobPooling() {
 
             let IN_PROGRESS_JOBS = jobs.map((ele) => ele.title);
 
-            if (IN_PROGRESS.length > 0) {
+            if (IN_PROGRESS_JOBS.length > 0) {
                 console.log('Found IN_PROGRESS jobs:', IN_PROGRESS_JOBS);
                 poolInterval = statusPooling(IN_PROGRESS_JOBS);
             }
