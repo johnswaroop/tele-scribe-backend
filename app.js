@@ -26,6 +26,11 @@ app.get("/send-email", async (req, res) => {
     res.send("send email")
 })
 
+app.get("/pooling", (req, res) => {
+    manageJobPooling()
+    res.send('pooling started');
+})
+
 // Start the server
 app.listen(port, () => {
     console.log(`Server is running on ${port}`);

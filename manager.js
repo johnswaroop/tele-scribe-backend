@@ -31,7 +31,6 @@ const statusPooling = (jobs) => {
         try {
             let res = await axios.get(`${process.env.CLIENT}/api/status-transcribe`);
             let status = res.data;
-            let COMPLETED = true;
             let COMPLETED_JOBS = [];
 
             // Check each job's status
@@ -51,14 +50,16 @@ const statusPooling = (jobs) => {
                     .from('jobs')
                     .update({ status: 'COMPLETED' })
                     .eq('title', ele)
-                    .select();
+                    .select("*");
 
                 if (error) {
                     console.error('Update Error', error);
                 } else {
                     console.log('Job status updated to COMPLETED:', ele);
                     console.log('Update response:', data);
-                    sendMail(ele)
+                    if (!data[0].email_sent) {
+                        sendMail(ele)
+                    }
                 }
             });
 
@@ -91,20 +92,17 @@ async function manageJobPooling() {
     const reloadJobs = async () => {
         console.log('Reloading job data');
         try {
-            const { data: jobs, error } = await supabase.from('jobs').select('*');
+            const { data: jobs, error } = await supabase.from('jobs').select('*').eq("status", "IN_PROGRESS");
             if (error) {
                 console.error('Error fetching jobs', error);
                 return;
             }
 
-            console.log('Fetched jobs:');
-
-            let IN_PROGRESS = jobs.filter((ele) => ele.status === 'IN_PROGRESS')
-                .map((ele) => ele.title);
+            let IN_PROGRESS_JOBS = jobs.map((ele) => ele.title);
 
             if (IN_PROGRESS.length > 0) {
-                console.log('Found IN_PROGRESS jobs:', IN_PROGRESS);
-                poolInterval = statusPooling(IN_PROGRESS);
+                console.log('Found IN_PROGRESS jobs:', IN_PROGRESS_JOBS);
+                poolInterval = statusPooling(IN_PROGRESS_JOBS);
             }
         } catch (error) {
             console.error('Error during reloadJobs:', error);
