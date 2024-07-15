@@ -34,7 +34,7 @@ const sendMail = async (job) => {
         <p>Dear Caller,</p>
         <p>Thank you for reaching out to us regarding your recent call. To ensure the accuracy and completeness of your medical report, we kindly request your verification.</p>
         <p style="text-align: center;">
-            <a href="https://medical-aw-transcribe.vercel.app/validate/${job}" style="display: inline-block; background-color: #007bff; color: #ffffff; text-decoration: none; padding: 12px 20px; border-radius: 5px;">Verify Now</a>
+            <a href="${process.env.CLIENT}/validate/${job}" style="display: inline-block; background-color: #007bff; color: #ffffff; text-decoration: none; padding: 12px 20px; border-radius: 5px;">Verify Now</a>
         </p>
         <p>Verification is crucial for us to proceed with processing your information accurately. If you encounter any issues or have questions, please do not hesitate to contact us at [Your Contact Information].</p>
         <p>Thank you for your prompt attention to this matter.</p>
